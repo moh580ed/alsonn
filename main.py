@@ -1,10 +1,20 @@
 from flet import *
+import os
+os.system("pip install websockets")
+os.system("pip install asyncio") 
+os.system("pip install json") 
+os.system("pip install aiohttp") 
+os.system("pip install datetime")
+os.system("pip install threading") 
+
 import websockets
 import asyncio
 import json
 import aiohttp
 from datetime import datetime
 import threading
+
+
 
 
 PRIMARY_COLOR = colors.BLUE_800
