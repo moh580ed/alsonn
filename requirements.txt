@@ -1,7 +1,6 @@
 flet
+websockets 15.0.1
+aiohttp 3.11.14
+threading2 0.3.1
+json2json 0.1.0
 datetime
-asyncio
-threading
-aiohttp
-websockets
-json
