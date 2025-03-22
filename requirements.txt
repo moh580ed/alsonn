@@ -1,1 +1,7 @@
 flet
+websockets
+asyncio
+json
+aiohttp
+datetime
+threading
