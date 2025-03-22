@@ -1,6 +1,1 @@
 flet
-websockets
-asyncio
-aiohttp
-datetime
-threading
