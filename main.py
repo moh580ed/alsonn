@@ -9,7 +9,7 @@ os.system("pip install threading")
 
 import websockets
 import asyncio
-import json
+import json2json
 import aiohttp
 from datetime import datetime
 import threading
