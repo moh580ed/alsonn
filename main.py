@@ -6,14 +6,14 @@ import aiohttp
 from datetime import datetime
 import threading
 
-# ألوان مخصصة
+
 PRIMARY_COLOR = colors.BLUE_800
 SECONDARY_COLOR = colors.GREY_200
 ACCENT_COLOR = colors.AMBER_600
 
 def create_appbar(root):
     return AppBar(
-        title=Text('الأسن للعلوم الحديثة', color=colors.WHITE, size=25, weight=FontWeight.BOLD),
+        title=Text('الألسن للعلوم الحديثة', color=colors.WHITE, size=25, weight=FontWeight.BOLD),
         bgcolor=PRIMARY_COLOR,
         center_title=True,
         elevation=10,
@@ -69,7 +69,7 @@ def main(root: Page):
             vertical_alignment=MainAxisAlignment.START,
             horizontal_alignment=CrossAxisAlignment.CENTER,
             bgcolor=SECONDARY_COLOR,
-            scroll="auto"  # إضافة التمرير لكل عرض
+            scroll="auto"  
         )
 
     def route_change(route):
@@ -77,7 +77,7 @@ def main(root: Page):
 
         if root.route == "/":
             student_code = TextField(
-                label="كود الطلاب",
+                label="كود الطالب",
                 prefix_icon=icons.LOCK,
                 password=True,
                 can_reveal_password=True,
@@ -100,7 +100,7 @@ def main(root: Page):
                     Column(
                         [
                             Image(src="img/icon.png", width=0.4 * root.width if root.width else 150, fit=ImageFit.CONTAIN),
-                            Text("مرحبًا بك في الأسن!", size=30, weight=FontWeight.BOLD, color=PRIMARY_COLOR),
+                            Text("مرحبًا بك في الألسن!", size=30, weight=FontWeight.BOLD, color=PRIMARY_COLOR),
                             username_field,
                             student_code,
                             ElevatedButton(
@@ -120,7 +120,7 @@ def main(root: Page):
                         alignment=MainAxisAlignment.CENTER,
                         spacing=20,
                         horizontal_alignment=CrossAxisAlignment.CENTER,
-                        scroll="auto"  # إضافة التمرير للعمود
+                        scroll="auto"  
                     )
                 )
             )
