@@ -19,7 +19,7 @@ env:
   # https://flet.dev/docs/publish#versioning
   BUILD_NUMBER: 1
   BUILD_VERSION: 1.0.0
-  PYTHON_VERSION: 3.13.2
+  PYTHON_VERSION: 3.9.11
   FLUTTER_VERSION: 3.29.1
 
 jobs:
@@ -36,7 +36,9 @@ jobs:
         python-version: ${{ env.PYTHON_VERSION }}
 
     - name: Install Python Dependencies
-    
+      run: |
+        pip install -r requirements.txt
+
     - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
       uses: subosito/flutter-action@v2
       with:
@@ -75,7 +77,9 @@ jobs:
         python-version: ${{ env.PYTHON_VERSION }}
 
     - name: Install Python Dependencies
-      
+      run: |
+        pip install -r requirements.txt
+
     - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
       uses: subosito/flutter-action@v2
       with:
@@ -107,7 +111,9 @@ jobs:
         python-version: ${{ env.PYTHON_VERSION }}
 
     - name: Install Python Dependencies
-      
+      run: |
+        pip install -r requirements.txt
+
     - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
       uses: subosito/flutter-action@v2
       with:
@@ -139,8 +145,8 @@ jobs:
         python-version: ${{ env.PYTHON_VERSION }}
 
     - name: Install Python Dependencies
-      
-
+      run: |
+        pip install -r requirements.txt
 
     - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
       uses: subosito/flutter-action@v2
@@ -173,7 +179,9 @@ jobs:
         python-version: ${{ env.PYTHON_VERSION }}
 
     - name: Install Python Dependencies
-      
+      run: |
+        pip install -r requirements.txt
+
     - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
       uses: subosito/flutter-action@v2
       with:
@@ -211,7 +219,9 @@ jobs:
         python-version: ${{ env.PYTHON_VERSION }}
 
     - name: Install Python Dependencies
-      
+      run: |
+        pip install -r requirements.txt
+
     - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
       uses: subosito/flutter-action@v2
       with:
