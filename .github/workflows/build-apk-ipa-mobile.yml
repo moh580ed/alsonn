@@ -24,9 +24,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: List directory contents
-      run: ls -la
-
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
@@ -35,10 +32,8 @@ jobs:
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flet==0.22.0
-        if [ -f "requirements.txt" ]; then
-          pip install -r requirements.txt || echo "Failed to install dependencies, continuing anyway"
-        fi
+        pip install flet
+        if [ -f "requirements.txt" ]; then pip install -r requirements.txt; fi
 
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
@@ -59,68 +54,24 @@ jobs:
     - name: Build Linux App
       run: |
         flutter config --no-analytics
-        flet build linux --verbose --build-number=${{ env.BUILD_NUMBER }} --build-version=${{ env.BUILD_VERSION }} --module-name main.py
+        flet build linux --verbose --build-number=${{ env.BUILD_NUMBER }} --build-version=${{ env.BUILD_VERSION }}
+        ls -la build/linux/x64/release/bundle/
       working-directory: ./
-      timeout-minutes: 30
 
-    - name: List build output
-      run: find build/ -type f || echo "No files found in build directory"
+    - name: Package AppImage
+      run: |
+        mkdir -p dist
+        flutter build linux
+        # Adjust path according to your project structure
+        cp -r build/linux/x64/release/bundle/* dist/
+      working-directory: ./
 
     - name: Upload Linux Artifact
       uses: actions/upload-artifact@v4
       with:
         name: linux-build
-        path: build/linux/**/*.{AppImage,appimage}  # توسيع نطاق البحث ليشمل صيغ متعددة
-        if-no-files-found: warn
-
-  build-macos:
-    runs-on: macos-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: List directory contents
-      run: ls -la
-
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ env.PYTHON_VERSION }}
-
-    - name: Install Python Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flet==0.22.0
-        if [ -f "requirements.txt" ]; then
-          pip install -r requirements.txt || echo "Failed to install dependencies, continuing anyway"
-        fi
-
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: ${{ env.FLUTTER_VERSION }}
-        channel: stable
-
-    - name: Get Flutter Dependencies
-      run: flutter pub get
-      working-directory: ./
-
-    - name: Build macOS App
-      run: |
-        flutter config --no-analytics
-        flet build macos --verbose --build-number=${{ env.BUILD_NUMBER }} --build-version=${{ env.BUILD_VERSION }} --module-name main.py
-      working-directory: ./
-      timeout-minutes: 30
-
-    - name: List build output
-      run: find build/ -type f || echo "No files found in build directory"
-
-    - name: Upload macOS Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: macos-build
-        path: build/macos/**/*.app
-        if-no-files-found: warn
+        path: dist/*.AppImage
+        if-no-files-found: error # Change to error to fail the job if no files found
 
   build-windows:
     runs-on: windows-latest
@@ -128,10 +79,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: List directory contents
-      shell: cmd
-      run: dir
-
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
@@ -140,22 +87,14 @@ jobs:
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flet==0.22.0
-        if [ -f "requirements.txt" ]; then
-          pip install -r requirements.txt || echo "Failed to install dependencies, continuing anyway"
-        fi
+        pip install flet
+        if [ -f "requirements.txt" ]; then pip install -r requirements.txt; fi
 
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
         flutter-version: ${{ env.FLUTTER_VERSION }}
         channel: stable
-
-    - name: Install Windows Build Tools
-      run: |
-        choco install -y visualstudio2022buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools"
-      shell: cmd
-      continue-on-error: true  # قد لا تكون ضرورية دائمًا، لكنها تضمن الاستمرار إذا كانت مثبتة بالفعل
 
     - name: Get Flutter Dependencies
       run: flutter pub get
@@ -165,130 +104,23 @@ jobs:
       shell: cmd
       run: |
         flutter config --no-analytics
-        flet build windows --verbose --build-number=%BUILD_NUMBER% --build-version=%BUILD_VERSION% --module-name main.py
+        flet build windows --verbose --build-number=%BUILD_NUMBER% --build-version=%BUILD_VERSION%
+        dir build\windows\runner\Release\
       working-directory: ./
-      timeout-minutes: 30
 
-    - name: List build output
+    - name: Package Windows App
       shell: cmd
-      run: dir build /s /p || echo "No files found in build directory"
+      run: |
+        mkdir dist
+        copy build\windows\runner\Release\*.exe dist\
+      working-directory: ./
 
     - name: Upload Windows Artifact
       uses: actions/upload-artifact@v4
       with:
         name: windows-build
-        path: build/windows/**/*.{exe,EXE}  # توسيع نطاق البحث ليشمل صيغ متعددة
-        if-no-files-found: warn
-
-  build-aab:
-    runs-on: macos-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: List directory contents
-      run: ls -la
-
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ env.PYTHON_VERSION }}
-
-    - name: Install Python Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flet==0.22.0
-        if [ -f "requirements.txt" ]; then
-          pip install -r requirements.txt || echo "Failed to install dependencies, continuing anyway"
-        fi
-
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: '17'
-
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: ${{ env.FLUTTER_VERSION }}
-        channel: stable
-
-    - name: Get Flutter Dependencies
-      run: flutter pub get
-      working-directory: ./
-
-    - name: Build AAB
-      run: |
-        flutter config --no-analytics
-        flet build aab --verbose --build-number=${{ env.BUILD_NUMBER }} --build-version=${{ env.BUILD_VERSION }} --module-name main.py
-      working-directory: ./
-      timeout-minutes: 30
-
-    - name: List build output
-      run: find build/ -type f || echo "No files found in build directory"
-
-    - name: Upload AAB Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: android-aab
-        path: build/**/*.{aab,AAB}
-        if-no-files-found: warn
-
-  build-apk:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: List directory contents
-      run: ls -la
-
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ env.PYTHON_VERSION }}
-
-    - name: Install Python Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flet==0.22.0
-        if [ -f "requirements.txt" ]; then
-          pip install -r requirements.txt || echo "Failed to install dependencies, continuing anyway"
-        fi
-
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: '17'
-
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: ${{ env.FLUTTER_VERSION }}
-        channel: stable
-
-    - name: Get Flutter Dependencies
-      run: flutter pub get
-      working-directory: ./
-
-    - name: Build APK
-      run: |
-        flutter config --no-analytics
-        flet build apk --verbose --build-number=${{ env.BUILD_NUMBER }} --build-version=${{ env.BUILD_VERSION }} --module-name main.py
-      working-directory: ./
-      timeout-minutes: 30
-
-    - name: List build output
-      run: find build/ -type f || echo "No files found in build directory"
-
-    - name: Upload APK Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: android-apk
-        path: build/**/*.{apk,APK}
-        if-no-files-found: warn
+        path: dist/*.exe
+        if-no-files-found: error
 
   build-ipa:
     runs-on: macos-latest
@@ -296,9 +128,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: List directory contents
-      run: ls -la
-
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
@@ -307,10 +136,8 @@ jobs:
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flet==0.22.0
-        if [ -f "requirements.txt" ]; then
-          pip install -r requirements.txt || echo "Failed to install dependencies, continuing anyway"
-        fi
+        pip install flet
+        if [ -f "requirements.txt" ]; then pip install -r requirements.txt; fi
 
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
@@ -325,16 +152,19 @@ jobs:
     - name: Build IPA
       run: |
         flutter config --no-analytics
-        flet build ipa --verbose --build-number=${{ env.BUILD_NUMBER }} --build-version=${{ env.BUILD_VERSION }} --module-name main.py
+        flet build ipa --verbose --build-number=${{ env.BUILD_NUMBER }} --build-version=${{ env.BUILD_VERSION }}
+        ls -la build/ios/ipa/
       working-directory: ./
-      timeout-minutes: 30
 
-    - name: List build output
-      run: find build/ -type f || echo "No files found in build directory"
+    - name: Package IPA
+      run: |
+        mkdir -p dist
+        cp build/ios/ipa/*.ipa dist/
+      working-directory: ./
 
     - name: Upload IPA Artifact
       uses: actions/upload-artifact@v4
       with:
         name: ios-ipa
-        path: build/ios/**/*.{ipa,IPA}  # تحديد مسار أكثر دقة لـ IPA
-        if-no-files-found: warn
+        path: dist/*.ipa
+        if-no-files-found: error
