@@ -24,6 +24,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: List directory contents
+      run: ls -la
+
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
@@ -32,11 +35,10 @@ jobs:
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flet
+        pip install flet==0.22.0  # تحديد إصدار مستقر
         if [ -f "requirements.txt" ]; then
           pip install -r requirements.txt || echo "Failed to install dependencies, continuing anyway"
         fi
-      continue-on-error: true
 
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
@@ -51,14 +53,13 @@ jobs:
         flutter doctor --verbose
 
     - name: Get Flutter Dependencies
-      run: |
-        flutter pub get
+      run: flutter pub get
       working-directory: ./
 
     - name: Build Linux App
       run: |
         flutter config --no-analytics
-        flet build linux --verbose --build-number=${{ env.BUILD_NUMBER }} --build-version=${{ env.BUILD_VERSION }}
+        flet build linux --verbose --build-number=${{ env.BUILD_NUMBER }} --build-version=${{ env.BUILD_VERSION }} --module-name main.py
       working-directory: ./
       timeout-minutes: 30
 
@@ -75,6 +76,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: List directory contents
+      run: ls -la
+
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
@@ -83,11 +87,10 @@ jobs:
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flet
+        pip install flet==0.22.0
         if [ -f "requirements.txt" ]; then
           pip install -r requirements.txt || echo "Failed to install dependencies, continuing anyway"
         fi
-      continue-on-error: true
 
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
@@ -96,14 +99,13 @@ jobs:
         channel: stable
 
     - name: Get Flutter Dependencies
-      run: |
-        flutter pub get
+      run: flutter pub get
       working-directory: ./
 
     - name: Build macOS App
       run: |
         flutter config --no-analytics
-        flet build macos --verbose --build-number=${{ env.BUILD_NUMBER }} --build-version=${{ env.BUILD_VERSION }}
+        flet build macos --verbose --build-number=${{ env.BUILD_NUMBER }} --build-version=${{ env.BUILD_VERSION }} --module-name main.py
       working-directory: ./
       timeout-minutes: 30
 
@@ -120,6 +122,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: List directory contents
+      shell: cmd
+      run: dir
+
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
@@ -128,11 +134,10 @@ jobs:
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flet
+        pip install flet==0.22.0
         if [ -f "requirements.txt" ]; then
           pip install -r requirements.txt || echo "Failed to install dependencies, continuing anyway"
         fi
-      continue-on-error: true
 
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
@@ -141,15 +146,14 @@ jobs:
         channel: stable
 
     - name: Get Flutter Dependencies
-      run: |
-        flutter pub get
+      run: flutter pub get
       working-directory: ./
 
     - name: Build Windows App
       shell: cmd
       run: |
         flutter config --no-analytics
-        flet build windows --verbose --build-number=%BUILD_NUMBER% --build-version=%BUILD_VERSION%
+        flet build windows --verbose --build-number=%BUILD_NUMBER% --build-version=%BUILD_VERSION% --module-name main.py
       working-directory: ./
       timeout-minutes: 30
 
@@ -166,6 +170,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: List directory contents
+      run: ls -la
+
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
@@ -174,11 +181,10 @@ jobs:
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flet
+        pip install flet==0.22.0
         if [ -f "requirements.txt" ]; then
           pip install -r requirements.txt || echo "Failed to install dependencies, continuing anyway"
         fi
-      continue-on-error: true
 
     - name: Setup Java
       uses: actions/setup-java@v4
@@ -193,14 +199,13 @@ jobs:
         channel: stable
 
     - name: Get Flutter Dependencies
-      run: |
-        flutter pub get
+      run: flutter pub get
       working-directory: ./
 
     - name: Build AAB
       run: |
         flutter config --no-analytics
-        flet build aab --verbose --build-number=${{ env.BUILD_NUMBER }} --build-version=${{ env.BUILD_VERSION }}
+        flet build aab --verbose --build-number=${{ env.BUILD_NUMBER }} --build-version=${{ env.BUILD_VERSION }} --module-name main.py
       working-directory: ./
       timeout-minutes: 30
 
@@ -217,6 +222,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: List directory contents
+      run: ls -la
+
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
@@ -225,11 +233,10 @@ jobs:
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flet
+        pip install flet==0.22.0
         if [ -f "requirements.txt" ]; then
           pip install -r requirements.txt || echo "Failed to install dependencies, continuing anyway"
         fi
-      continue-on-error: true
 
     - name: Setup Java
       uses: actions/setup-java@v4
@@ -244,14 +251,13 @@ jobs:
         channel: stable
 
     - name: Get Flutter Dependencies
-      run: |
-        flutter pub get
+      run: flutter pub get
       working-directory: ./
 
     - name: Build APK
       run: |
         flutter config --no-analytics
-        flet build apk --verbose --build-number=${{ env.BUILD_NUMBER }} --build-version=${{ env.BUILD_VERSION }}
+        flet build apk --verbose --build-number=${{ env.BUILD_NUMBER }} --build-version=${{ env.BUILD_VERSION }} --module-name main.py
       working-directory: ./
       timeout-minutes: 30
 
@@ -268,6 +274,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: List directory contents
+      run: ls -la
+
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
@@ -276,11 +285,10 @@ jobs:
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flet
+        pip install flet==0.22.0
         if [ -f "requirements.txt" ]; then
           pip install -r requirements.txt || echo "Failed to install dependencies, continuing anyway"
         fi
-      continue-on-error: true
 
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
@@ -289,14 +297,13 @@ jobs:
         channel: stable
 
     - name: Get Flutter Dependencies
-      run: |
-        flutter pub get
+      run: flutter pub get
       working-directory: ./
 
     - name: Build IPA
       run: |
         flutter config --no-analytics
-        flet build ipa --verbose --build-number=${{ env.BUILD_NUMBER }} --build-version=${{ env.BUILD_VERSION }}
+        flet build ipa --verbose --build-number=${{ env.BUILD_NUMBER }} --build-version=${{ env.BUILD_VERSION }} --module-name main.py
       working-directory: ./
       timeout-minutes: 30
 
