@@ -1,9 +1,2 @@
-flet>=0.22.0
-os
-websockets>=12.0
-aiohttp>=3.9.5
-asyncio
-json
-datetime
-threading
+flet
 
