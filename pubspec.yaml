@@ -1,0 +1,16 @@
+name: alson_education
+description: A Flet-based educational app
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flet: ^0.22.0
+
+flutter:
+  assets:
+    - assets/img/icon.png
+    - assets/img/po.jpg
