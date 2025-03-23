@@ -35,7 +35,7 @@ jobs:
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flet==0.22.0  # تحديد إصدار مستقر
+        pip install flet==0.22.0
         if [ -f "requirements.txt" ]; then
           pip install -r requirements.txt || echo "Failed to install dependencies, continuing anyway"
         fi
@@ -63,11 +63,14 @@ jobs:
       working-directory: ./
       timeout-minutes: 30
 
+    - name: List build output
+      run: find build/ -type f || echo "No files found in build directory"
+
     - name: Upload Linux Artifact
       uses: actions/upload-artifact@v4
       with:
         name: linux-build
-        path: build/linux/**/*.AppImage
+        path: build/linux/**/*.{AppImage,appimage}  # توسيع نطاق البحث ليشمل صيغ متعددة
         if-no-files-found: warn
 
   build-macos:
@@ -109,6 +112,9 @@ jobs:
       working-directory: ./
       timeout-minutes: 30
 
+    - name: List build output
+      run: find build/ -type f || echo "No files found in build directory"
+
     - name: Upload macOS Artifact
       uses: actions/upload-artifact@v4
       with:
@@ -145,6 +151,12 @@ jobs:
         flutter-version: ${{ env.FLUTTER_VERSION }}
         channel: stable
 
+    - name: Install Windows Build Tools
+      run: |
+        choco install -y visualstudio2022buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools"
+      shell: cmd
+      continue-on-error: true  # قد لا تكون ضرورية دائمًا، لكنها تضمن الاستمرار إذا كانت مثبتة بالفعل
+
     - name: Get Flutter Dependencies
       run: flutter pub get
       working-directory: ./
@@ -157,11 +169,15 @@ jobs:
       working-directory: ./
       timeout-minutes: 30
 
+    - name: List build output
+      shell: cmd
+      run: dir build /s /p || echo "No files found in build directory"
+
     - name: Upload Windows Artifact
       uses: actions/upload-artifact@v4
       with:
         name: windows-build
-        path: build/windows/**/*.exe
+        path: build/windows/**/*.{exe,EXE}  # توسيع نطاق البحث ليشمل صيغ متعددة
         if-no-files-found: warn
 
   build-aab:
@@ -209,11 +225,14 @@ jobs:
       working-directory: ./
       timeout-minutes: 30
 
+    - name: List build output
+      run: find build/ -type f || echo "No files found in build directory"
+
     - name: Upload AAB Artifact
       uses: actions/upload-artifact@v4
       with:
         name: android-aab
-        path: build/**/*.aab
+        path: build/**/*.{aab,AAB}
         if-no-files-found: warn
 
   build-apk:
@@ -261,11 +280,14 @@ jobs:
       working-directory: ./
       timeout-minutes: 30
 
+    - name: List build output
+      run: find build/ -type f || echo "No files found in build directory"
+
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
         name: android-apk
-        path: build/**/*.apk
+        path: build/**/*.{apk,APK}
         if-no-files-found: warn
 
   build-ipa:
@@ -307,9 +329,12 @@ jobs:
       working-directory: ./
       timeout-minutes: 30
 
+    - name: List build output
+      run: find build/ -type f || echo "No files found in build directory"
+
     - name: Upload IPA Artifact
       uses: actions/upload-artifact@v4
       with:
         name: ios-ipa
-        path: build/**/*.ipa
+        path: build/ios/**/*.{ipa,IPA}  # تحديد مسار أكثر دقة لـ IPA
         if-no-files-found: warn
