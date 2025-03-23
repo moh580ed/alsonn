@@ -1,15 +1,6 @@
 from flet import *
-import os
-import websockets
-import asyncio
-import json
-import aiohttp
-from datetime import datetime
-import threading
 
-
-
-
+# ألوان مخصصة
 PRIMARY_COLOR = colors.BLUE_800
 SECONDARY_COLOR = colors.GREY_200
 ACCENT_COLOR = colors.AMBER_600
@@ -54,9 +45,6 @@ def main(root: Page):
         border_color=PRIMARY_COLOR
     )
 
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-
     def create_view(route, content):
         return View(
             route,
@@ -72,7 +60,7 @@ def main(root: Page):
             vertical_alignment=MainAxisAlignment.START,
             horizontal_alignment=CrossAxisAlignment.CENTER,
             bgcolor=SECONDARY_COLOR,
-            scroll="auto"  
+            scroll="auto"
         )
 
     def route_change(route):
@@ -89,7 +77,7 @@ def main(root: Page):
                 width=0.8 * root.width if root.width else 320,
                 border_color=PRIMARY_COLOR
             )
-            
+
             def validate_login(e):
                 if username_field.value.strip() and student_code.value.strip():
                     root.go("/الصفحه الراسية")
@@ -102,14 +90,14 @@ def main(root: Page):
                     "/",
                     Column(
                         [
-                            Image(src="img/icon.png", width=0.4 * root.width if root.width else 150, fit=ImageFit.CONTAIN),
+                            Image(src="assets/img/icon.png", width=150, fit=ImageFit.CONTAIN),
                             Text("مرحبًا بك في الألسن!", size=30, weight=FontWeight.BOLD, color=PRIMARY_COLOR),
                             username_field,
                             student_code,
                             ElevatedButton(
                                 "تسجيل الدخول",
                                 on_click=validate_login,
-                                width=0.5 * root.width if root.width else 200,
+                                width=200,
                                 height=50,
                                 style=ButtonStyle(
                                     bgcolor=PRIMARY_COLOR,
@@ -123,7 +111,7 @@ def main(root: Page):
                         alignment=MainAxisAlignment.CENTER,
                         spacing=20,
                         horizontal_alignment=CrossAxisAlignment.CENTER,
-                        scroll="auto"  
+                        scroll="auto"
                     )
                 )
             )
@@ -139,7 +127,7 @@ def main(root: Page):
                                 content=Container(
                                     Column([
                                         Text("جدول المحاضرات اليوم", size=18, weight=FontWeight.BOLD),
-                                        Image(src="img/po.jpg", width=0.9 * root.width if root.width else 340, fit=ImageFit.COVER),
+                                        Image(src="assets/img/po.jpg", width=340, fit=ImageFit.COVER),
                                         Text("الإثنين 22 مارس 2025", size=14, color=colors.GREY_600),
                                     ]),
                                     padding=10
@@ -163,7 +151,7 @@ def main(root: Page):
                         ],
                         spacing=20,
                         horizontal_alignment=CrossAxisAlignment.CENTER,
-                        scroll="auto"  # إضافة التمرير للعمود
+                        scroll="auto"
                     )
                 )
             )
@@ -174,11 +162,11 @@ def main(root: Page):
                 prefix_icon=icons.NUMBERS,
                 border_radius=15,
                 bgcolor=colors.WHITE,
-                width=0.8 * root.width if root.width else 320,
+                width=320,
                 keyboard_type=KeyboardType.NUMBER,
                 border_color=PRIMARY_COLOR
             )
-            
+
             def show_results(e):
                 if student_id.value.strip():
                     root.go("/عرض النتيجة")
@@ -194,27 +182,24 @@ def main(root: Page):
                             Text("استعلام النتائج", size=28, weight=FontWeight.BOLD, color=PRIMARY_COLOR),
                             Card(
                                 content=Container(
-                                    Column([
-                                        student_id,
-                                        Text("تأكد من إدخال رقم الجلوس الصحيح", size=14, color=colors.GREY_600),
-                                    ]),
+                                    Column([student_id, Text("تأكد من إدخال رقم الجلوس الصحيح", size=14, color=colors.GREY_600)]),
                                     padding=10
                                 ),
                                 elevation=5,
                                 shape=RoundedRectangleBorder(radius=15),
-                                width=0.9 * root.width if root.width else 340
+                                width=340
                             ),
                             ElevatedButton(
                                 "عرض النتيجة",
                                 on_click=show_results,
-                                width=0.5 * root.width if root.width else 200,
+                                width=200,
                                 style=ButtonStyle(bgcolor=PRIMARY_COLOR, color=colors.WHITE, shape=RoundedRectangleBorder(radius=12))
                             )
                         ],
                         alignment=MainAxisAlignment.CENTER,
                         spacing=20,
                         horizontal_alignment=CrossAxisAlignment.CENTER,
-                        scroll="auto"  # إضافة التمرير للعمود
+                        scroll="auto"
                     )
                 )
             )
@@ -239,18 +224,18 @@ def main(root: Page):
                                 ),
                                 elevation=5,
                                 shape=RoundedRectangleBorder(radius=15),
-                                width=0.9 * root.width if root.width else 340
+                                width=340
                             ),
                             ElevatedButton(
                                 "عودة",
                                 on_click=lambda _: root.go("/النتيجه"),
-                                width=0.5 * root.width if root.width else 200,
+                                width=200,
                                 style=ButtonStyle(bgcolor=PRIMARY_COLOR, color=colors.WHITE)
                             )
                         ],
                         spacing=20,
                         horizontal_alignment=CrossAxisAlignment.CENTER,
-                        scroll="auto"  # إضافة التمرير للعمود
+                        scroll="auto"
                     )
                 )
             )
@@ -266,8 +251,8 @@ def main(root: Page):
                                 content=Container(
                                     Column([
                                         Text("تواصلوا معنا", size=18, weight=FontWeight.BOLD),
-                                        Text("البريد: support@alson.edu", size=14),
-                                        Text("الهاتف: 0123456789", size=14),
+                                        Text("البريد: alalsunacademy@gmail.com", size=14),
+                                        Text("الهاتف: 01023828155", size=14),
                                         Divider(),
                                         Text("ساعات العمل: 8 صباحاً - 4 مساءً", size=14),
                                     ]),
@@ -275,144 +260,41 @@ def main(root: Page):
                                 ),
                                 elevation=5,
                                 shape=RoundedRectangleBorder(radius=15),
-                                width=0.9 * root.width if root.width else 340
+                                width=340
                             ),
-                            Image(src="img/po.jpg", width=0.9 * root.width if root.width else 340, fit=ImageFit.COVER)
+                            Image(src="assets/img/po.jpg", width=340, fit=ImageFit.COVER)
                         ],
                         spacing=20,
                         horizontal_alignment=CrossAxisAlignment.CENTER,
-                        scroll="auto"  # إضافة التمرير للعمود
+                        scroll="auto"
                     )
                 )
             )
 
         elif root.route == "/الشات":
-            message_input = TextField(
-                label="اكتب رسالتك...",
-                border_radius=15,
-                bgcolor=colors.WHITE,
-                width=0.75 * root.width if root.width else 300,
-                multiline=True,
-                max_lines=3,
-                border_color=PRIMARY_COLOR,
-                text_style=TextStyle(size=14)
-            )
-            chat_container = Container(
-                content=Column([], scroll="auto"),  # التمرير موجود بالفعل هنا
-                expand=True,
-                bgcolor=colors.WHITE,
-                border_radius=15,
-                padding=10,
-                height=0.7 * root.height if root.height else 450
-            )
-
-            def update_chat(messages):
-                chat_container.content.controls = [
-                    Container(
-                        content=Row([
-                            Container(
-                                Text(f"{msg['username']}", size=14, weight=FontWeight.BOLD, color=PRIMARY_COLOR),
-                                padding=padding.only(left=10)
-                            ),
-                            Container(
-                                Text(msg["message"], size=14, color=colors.BLACK87),
-                                bgcolor=colors.GREY_100,
-                                padding=10,
-                                border_radius=10,
-                                expand=True
-                            ),
-                            Text(msg["timestamp"][-8:], size=12, color=colors.GREY_600)
-                        ], alignment=MainAxisAlignment.START),
-                        margin=margin.symmetric(vertical=5)
-                    ) for msg in messages if isinstance(msg, dict)
-                ]
-                chat_container.content.controls.reverse()
-                root.update()
-
-            async def connect_websocket(chat_container, root):
-                uri = "ws://127.0.0.1:8000/ws"
-                while True:
-                    try:
-                        async with websockets.connect(uri) as websocket:
-                            async with aiohttp.ClientSession() as session:
-                                async with session.get("http://127.0.0.1:8000/messages") as resp:
-                                    if resp.status == 200:
-                                        messages = await resp.json()
-                                        update_chat(messages)
-                            while True:
-                                try:
-                                    msg = await websocket.recv()
-                                    message_data = json.loads(msg)
-                                    current_messages = [
-                                        {
-                                            "username": m.content.controls[0].content.value,
-                                            "message": m.content.controls[1].content.value,
-                                            "timestamp": m.content.controls[2].value
-                                        } for m in chat_container.content.controls
-                                    ]
-                                    update_chat([message_data] + current_messages)
-                                except websockets.ConnectionClosed:
-                                    break
-                    except Exception as e:
-                        print(f"WebSocket Error: {e}")
-                        root.snack_bar = SnackBar(Text("فشل الاتصال بالشات", color=colors.RED), open=True)
-                        root.update()
-                        await asyncio.sleep(2)
-
-            async def send_message(message):
-                uri = "ws://127.0.0.1:8000/ws"
-                try:
-                    async with websockets.connect(uri) as websocket:
-                        message_data = {
-                            "username": username_field.value or "مجهول",
-                            "message": message,
-                            "timestamp": datetime.now().isoformat()
-                        }
-                        await websocket.send(json.dumps(message_data))
-                except Exception as e:
-                    print(f"Send Error: {e}")
-                    root.snack_bar = SnackBar(Text("فشل إرسال الرسالة", color=colors.RED), open=True)
-                    root.update()
-
-            def start_websocket():
-                def run_websocket():
-                    asyncio.set_event_loop(asyncio.new_event_loop())
-                    asyncio.get_event_loop().run_until_complete(connect_websocket(chat_container, root))
-                
-                websocket_thread = threading.Thread(target=run_websocket, daemon=True)
-                websocket_thread.start()
-
-            def send_message_handler(e):
-                if message_input.value.strip():
-                    asyncio.run_coroutine_threadsafe(send_message(message_input.value), loop)
-                    message_input.value = ""
-                    root.update()
-
-            start_websocket()
-
             root.views.append(
                 create_view(
                     "/الشات",
                     Column(
                         [
                             Text("غرفة الشات", size=28, weight=FontWeight.BOLD, color=PRIMARY_COLOR),
-                            chat_container,
-                            ResponsiveRow([
-                                message_input,
-                                IconButton(
-                                    icon=icons.SEND,
-                                    bgcolor=PRIMARY_COLOR,
-                                    icon_color=colors.WHITE,
-                                    on_click=send_message_handler,
-                                    tooltip="إرسال",
-                                    col={"xs": 2}
-                                )
-                            ], alignment=MainAxisAlignment.CENTER)
+                            Container(
+                                content=Text("الشات غير متاح حاليًا", size=16, color=colors.GREY_600),
+                                padding=15,
+                                bgcolor=colors.WHITE,
+                                border_radius=15,
+                                height=450
+                            ),
+                            ElevatedButton(
+                                "عودة",
+                                on_click=lambda _: root.go("/الصفحه الراسية"),
+                                width=200,
+                                style=ButtonStyle(bgcolor=PRIMARY_COLOR, color=colors.WHITE)
+                            )
                         ],
-                        spacing=15,
-                        expand=True,
+                        spacing=20,
                         horizontal_alignment=CrossAxisAlignment.CENTER,
-                        scroll="auto"  # إضافة التمرير للعمود
+                        scroll="auto"
                     )
                 )
             )
@@ -427,18 +309,18 @@ def main(root: Page):
                             ElevatedButton(
                                 "العودة للرئيسية",
                                 on_click=lambda _: root.go("/الصفحه الراسية"),
-                                width=0.5 * root.width if root.width else 200,
+                                width=200,
                                 style=ButtonStyle(bgcolor=PRIMARY_COLOR, color=colors.WHITE)
                             )
                         ],
                         alignment=MainAxisAlignment.CENTER,
                         spacing=20,
                         horizontal_alignment=CrossAxisAlignment.CENTER,
-                        scroll="auto"  # إضافة التمرير للعمود
+                        scroll="auto"
                     )
                 )
             )
-        
+
         root.update()
 
     def root_go(view):
@@ -451,4 +333,5 @@ def main(root: Page):
     root.on_view_pop = root_go
     root.go(root.route)
 
-app(target=main, assets_dir='assets')
+if __name__ == "__main__":
+    app(target=main, assets_dir="assets")
