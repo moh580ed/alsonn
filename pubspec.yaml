@@ -10,6 +10,8 @@ dependencies:
     sdk: flutter
   flet: ^0.22.0
 
+dependency_overrides: {}  # إضافة هذا القسم الفارغ لحل KeyError
+
 flutter:
   assets:
     - assets/img/icon.png
