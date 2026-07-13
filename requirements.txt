@@ -1,2 +1,5 @@
 flet
+qrcode
+Pillow
+pyzbar
 
